@@ -4,6 +4,9 @@
 *.ap_
 *.aab
 
+#for the python virtual environment
+venv
+
 # Files for the ART/Dalvik VM
 *.dex
 
