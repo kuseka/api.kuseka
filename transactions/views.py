@@ -1,5 +1,5 @@
 from .serializers import *
-from rest_framework import generics
+from rest_framework import generics,status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 # Create your views here.
@@ -10,6 +10,13 @@ class TransactionsView(generics.ListAPIView):
     def get_queryset(self):
         # You can add some filtering, ordering or pagination here if needed
         return Transactions.objects.all()
+    
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        transaction = serializer.save()
+        return Response(self.get_serializer(transaction).data, status=status.HTTP_201_CREATED)
     
 class TransactionView(generics.RetrieveAPIView):
     queryset = Transactions.objects.all()

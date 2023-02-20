@@ -8,3 +8,6 @@ class Transactions(models.Model):
     transaction_date = models.DateTimeField(auto_now_add=True)
     amount = models.DecimalField(decimal_places=2,max_digits=10,default=True,blank=True)
     status = models.TextField(default=True,blank=False)
+
+    def __str__(self) -> str:
+        return self.uuid
