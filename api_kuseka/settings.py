@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'vendors',
     'transactions',
     'payments',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [

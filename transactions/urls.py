@@ -4,4 +4,5 @@ from .views import *
 
 urlpatterns = [
     path('', TransactionsView.as_view(),name="Trasactions"),
+    path('<int:id>/', TransactionView.as_view(),name="Trasaction"),
 ]
