@@ -3,3 +3,8 @@ djangorestframework
 markdown 
 django-filter
 psycopg2
+django-rest-swagger
+drf-yasg
+coreapi 
+pyyaml 
+djangorestframework-simplejwt

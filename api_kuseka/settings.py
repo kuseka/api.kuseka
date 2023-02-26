@@ -39,11 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'campaigns',
     'resellers',
-    'users',
     'vendors',
     'transactions',
     'payments',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'users',
+    'billing',
+    'utils',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTH_USER_MODEL = 'users.User'
 ROOT_URLCONF = 'api_kuseka.urls'
 
 TEMPLATES = [
@@ -76,6 +81,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'api_kuseka.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100,
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -83,7 +98,7 @@ WSGI_APPLICATION = 'api_kuseka.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dbkuseka', 
+        'NAME': 'dbtestkuseka', 
         'USER': 'dbmasterkuseka', 
         'PASSWORD': '6;5az2)pbH;[Twv8bUM1V.``7T&dtCia',
         'HOST': 'ls-034a154a8b83008912b0a926bf2472c38233271b.czcy3uqnmgpa.eu-west-2.rds.amazonaws.com', 

@@ -9,17 +9,17 @@ class TransactionsView(generics.ListAPIView):
 
     def get_queryset(self):
         # You can add some filtering, ordering or pagination here if needed
-        return Transactions.objects.all()
+        return Transaction.objects.all()
     
     
-    def create(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         transaction = serializer.save()
         return Response(self.get_serializer(transaction).data, status=status.HTTP_201_CREATED)
     
 class TransactionView(generics.RetrieveAPIView):
-    queryset = Transactions.objects.all()
+    queryset = Transaction.objects.all()
     serializer_class = TransactionsSerializer
     lookup_field = 'id' # or the field you want to use as the lookup parameter
 
@@ -28,4 +28,4 @@ class TransactionView(generics.RetrieveAPIView):
         queryset = self.get_queryset()
         transaction = queryset.filter(id=transaction_id).first() # filter the queryset by the id parameter
         serializer = self.get_serializer(transaction)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
