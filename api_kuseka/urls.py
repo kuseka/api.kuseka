@@ -15,8 +15,31 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework.permissions import AllowAny
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Kuseka API",
+      default_version='v1',
+      description="This is the API for Kuseka and all its operations",
+   ),
+   public=True,
+   authentication_classes=[],
+   permission_classes=[AllowAny],
+
+)
+
 
 urlpatterns = [
     path('transactions/', include('transactions.urls')),
+    path('auth/', include('users.urls')),
+    path('vendor/', include('vendors.urls')),
+    path('reseller/', include('resellers.urls')),
+    path('billing/', include('billing.urls')),
+    path('campaign/', include('campaigns.urls')),
+    path('utils/', include('utils.urls')),
     path('admin/', admin.site.urls),
+    path('docs/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

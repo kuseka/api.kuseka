@@ -3,4 +3,4 @@ from .models import *
 
 # Register your models here.
 
-admin.site.register(Transactions)
+admin.site.register(Transaction)

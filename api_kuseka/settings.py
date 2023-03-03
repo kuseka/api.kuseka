@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-poap2gi&7y!c+-ih43q9nep$s-$yfrtm*cn0%l&3h4#3r9!&al
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",
+    "http://127.0.0.1",
+]
 
 
 # Application definition
@@ -37,16 +43,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'campaigns',
     'resellers',
-    'users',
     'vendors',
     'transactions',
     'payments',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'users',
+    'billing',
+    'utils',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,6 +68,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTH_USER_MODEL = 'users.User'
 ROOT_URLCONF = 'api_kuseka.urls'
 
 TEMPLATES = [
@@ -76,14 +89,57 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'api_kuseka.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "ISSUER": "Kuseka",
+}
+
+#AWS s3 bucket setup
+
+AWS_ACCESS_KEY_ID = 'AKIAZTQPPUOHPRMKL5FS'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'kuseka'
+AWS_S3_REGION_NAME = 'eu-west-2'
+AWS_DEFAULT_ACL = 'public-read'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+#local server testing
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'kusekadb', 
+#         'USER': 'postgres', 
+#         'PASSWORD': '6Prayers',
+#         'HOST': 'localhost', 
+#         'PORT': '',
+#     }
+# }
+
+#live server testing
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dbkuseka', 
+        'NAME': 'dbtestkuseka', 
         'USER': 'dbmasterkuseka', 
         'PASSWORD': '6;5az2)pbH;[Twv8bUM1V.``7T&dtCia',
         'HOST': 'ls-034a154a8b83008912b0a926bf2472c38233271b.czcy3uqnmgpa.eu-west-2.rds.amazonaws.com', 
