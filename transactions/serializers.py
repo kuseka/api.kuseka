@@ -5,5 +5,6 @@ from .models import *
 
 class TransactionsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Transactions
+        model = Transaction
         fields= '__all__'
+        
