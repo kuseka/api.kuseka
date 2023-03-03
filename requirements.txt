@@ -8,3 +8,7 @@ drf-yasg
 coreapi 
 pyyaml 
 djangorestframework-simplejwt
+boto3
+django-storages
+Pillow
+django-cors-headers
